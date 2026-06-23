@@ -159,15 +159,18 @@ VITE_BACKEND_URL=http://localhost:5000
 
 ### Home Page
 
-Add screenshot here.
+<img width="1308" height="652" alt="image" src="https://github.com/user-attachments/assets/da692561-3672-4b28-89fc-c2dcca7e6a2f" />
+
 
 ### Login Page
 
-Add screenshot here.
+<img width="1309" height="655" alt="image" src="https://github.com/user-attachments/assets/1f1980c4-7f6c-477a-a12a-bcf45ee72784" />
+
 
 ### Dashboard
 
-Add screenshot here.
+<img width="1305" height="658" alt="image" src="https://github.com/user-attachments/assets/33c4951d-4b66-4073-b2e2-a99e83425aa1" />
+
 
 ---
 
