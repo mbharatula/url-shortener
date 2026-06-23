@@ -3,7 +3,6 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -26,7 +25,6 @@ function Register() {
         setLoading(true);
 
         try {
-
             await api.post(
                 "/auth/register",
                 formData
@@ -37,26 +35,24 @@ function Register() {
             navigate("/login");
 
         } catch (error) {
-
+            console.log(error);
             alert(
                 error.response?.data?.message ||
-                "Something went wrong"
+                "Registration failed"
             );
-
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div className="auth-page">
+            <div className="auth-container">
+                <h1>Create Account</h1>
 
-            <div style={{ width: "100%" }}>
-                <h1 style={{ marginBottom: "24px", textAlign: "center" }}>Create Account</h1>
+                <form onSubmit={handleSubmit}>
 
-                <form onSubmit={handleSubmit} style={{ maxWidth: "420px", margin: "0 auto" }}>
-
-                    <div style={{ marginBottom: "12px" }}>
+                    <div className="auth-form-group">
                         <input
                             type="text"
                             name="name"
@@ -64,11 +60,10 @@ function Register() {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            style={{ width: "100%" }}
                         />
                     </div>
 
-                    <div style={{ marginBottom: "12px" }}>
+                    <div className="auth-form-group">
                         <input
                             type="email"
                             name="email"
@@ -76,11 +71,10 @@ function Register() {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            style={{ width: "100%" }}
                         />
                     </div>
 
-                    <div style={{ marginBottom: "24px" }}>
+                    <div className="auth-form-group">
                         <input
                             type="password"
                             name="password"
@@ -88,21 +82,22 @@ function Register() {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            style={{ width: "100%" }}
                         />
                     </div>
 
-                    <button type="submit" disabled={loading} style={{ width: "100%", marginBottom: "16px" }}>
-                        {loading ? "Creating account..." : "Register"}
-                    </button>
+                    <div className="form-actions">
+                        <button type="submit" disabled={loading}>
+                            {loading ? "Creating account..." : "Register"}
+                        </button>
+                    </div>
 
-                    <p style={{ textAlign: "center", fontSize: "0.95rem", marginTop: "16px" }}>
-                        Already have an account? <a href="/login" style={{ color: "var(--accent-strong)", fontWeight: "600" }}>Login here</a>
-                    </p>
+                    <div className="auth-footer">
+                        <span>Already have an account?</span>
+                        <a href="/login">Login here</a>
+                    </div>
 
                 </form>
             </div>
-
         </div>
     );
 }

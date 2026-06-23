@@ -3,118 +3,76 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../api/axios";
 
-import UrlForm from
-"../components/UrlForm";
+import UrlForm from "../components/UrlForm";
 
-import UrlTable from
-"../components/UrlTable";
+import UrlTable from "../components/UrlTable";
 
-import StatsCard from
-"../components/StatsCard";
+import StatsCard from "../components/StatsCard";
 
 function Dashboard() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [urls, setUrls] = useState([]);
 
-    const [urls, setUrls] = useState([]);
+  const [stats, setStats] = useState({
+    totalUrls: 0,
+    totalClicks: 0,
+  });
 
-    const [stats, setStats] =
-        useState({
-            totalUrls: 0,
-            totalClicks: 0
-        });
+  const fetchData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const fetchData = useCallback(async () => {
+      const urlsResponse = await api.get("/url/myurls", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        try {
+      setUrls(urlsResponse.data);
 
-            const token =
-                localStorage.getItem("token");
+      const statsResponse = await api.get("/url/stats", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-            const urlsResponse =
-                await api.get(
-                    "/url/myurls",
-                    {
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`
-                        }
-                    }
-                );
+      setStats(statsResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
-            setUrls(
-                urlsResponse.data
-            );
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-            const statsResponse =
-                await api.get(
-                    "/url/stats",
-                    {
-                        headers: {
-                            Authorization:
-                                `Bearer ${token}`
-                        }
-                    }
-                );
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-            setStats(
-                statsResponse.data
-            );
+    const loadData = async () => {
+      await fetchData();
+    };
 
-        } catch (error) {
+    loadData();
+  }, [fetchData, navigate]);
 
-            console.log(error);
+  return (
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1>Dashboard</h1>
+        <p>Manage and track your shortened URLs</p>
+      </div>
 
-        }
+      <div className="dashboard-stats">
+        <StatsCard totalUrls={stats.totalUrls} totalClicks={stats.totalClicks} />
+      </div>
 
-    }, []);
-
-    useEffect(() => {
-
-        const token =
-            localStorage.getItem("token");
-
-        if (!token) {
-            navigate("/login");
-            return;
-        }
-
-        const loadData = async () => {
-            await fetchData();
-        };
-
-        loadData();
-
-    }, [fetchData, navigate]);
-
-    return (
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
-
-            <div style={{ width: "100%", textAlign: "center" }}>
-                <h1 style={{ marginBottom: "8px" }}>Dashboard</h1>
-                <p style={{ color: "var(--text-muted)", marginBottom: 0 }}>Manage and track your shortened URLs</p>
-            </div>
-
-            <StatsCard
-                totalUrls={stats.totalUrls}
-                totalClicks={stats.totalClicks}
-            />
-
-            <div style={{ width: "100%", maxWidth: "600px" }}>
-                <UrlForm
-                    refreshUrls={fetchData}
-                />
-            </div>
-
-            <div style={{ width: "100%" }}>
-                <UrlTable
-                    urls={urls}
-                    refreshUrls={fetchData}
-                />
-            </div>
-
-        </div>
-    );
+      <UrlForm refreshUrls={fetchData} />
+      <UrlTable urls={urls} refreshUrls={fetchData} />
+    </div>
+  );
 }
 
 export default Dashboard;

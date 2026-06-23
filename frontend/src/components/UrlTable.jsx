@@ -22,14 +22,14 @@ function UrlTable({ urls, refreshUrls }) {
   };
 
   return (
-    <div style={{ width: "100%", overflow: "auto" }}>
-      <h3 style={{ marginTop: 0, marginBottom: "1.5rem", textAlign: "center", color: "var(--text-strong)" }}>Your URLs</h3>
+    <div className="url-table-container">
+      <h3>Your URLs</h3>
       {urls.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>
+        <div className="table-empty">
           <p>No URLs created yet. Create your first URL above!</p>
         </div>
       ) : (
-        <table border="1" style={{ width: "100%" }}>
+        <table>
           <thead>
             <tr>
               <th>Original URL</th>
@@ -60,7 +60,7 @@ function UrlTable({ urls, refreshUrls }) {
                     href={`${import.meta.env.VITE_BACKEND_URL}/${url.shortCode}`}
                     target="_blank"
                     rel="noreferrer"
-                    style={{ fontSize: "0.9rem", fontFamily: "monospace" }}
+                    style={{ fontFamily: "monospace" }}
                   >
                     {url.shortCode}
                   </a>
@@ -70,14 +70,8 @@ function UrlTable({ urls, refreshUrls }) {
 
                 <td style={{ textAlign: "center" }}>
                   <button
+                    className="btn-danger"
                     onClick={() => handleDelete(url._id)}
-                    style={{
-                      minHeight: "2rem",
-                      padding: "0.5rem 1rem",
-                      fontSize: "0.9rem",
-                      background: "linear-gradient(135deg, #ef4444, #dc2626)",
-                      color: "#ffffff"
-                    }}
                   >
                     Delete
                   </button>
